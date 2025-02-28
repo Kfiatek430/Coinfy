@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+.from-blue-850 {
+    --tw-gradient-from:  var(--tw-gradient-from-position);
+    --tw-gradient-to: rgba(4, 15, 67, 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.to-blue-700 {
+    --tw-gradient-to:  var(--tw-gradient-to-position);
+}
