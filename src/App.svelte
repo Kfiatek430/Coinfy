@@ -17,6 +17,12 @@
 
   let fromCurrency = currencies[0];
   let toCurrency = currencies[1];
+
+  const swapCurrencies = () => {
+    const temp = fromCurrency;
+    fromCurrency = toCurrency;
+    toCurrency = temp;
+  };
 </script>
 
 <Navbar />
@@ -59,6 +65,7 @@
             class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 inline-flex rounded-full border border-gray-300 border-solid border-gray-250 bg-white p-3 hover:bg-gray-150 transition-colors"
             aria-label="Swap currencies"
             type="button"
+            on:click={swapCurrencies}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
