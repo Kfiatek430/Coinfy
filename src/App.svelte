@@ -14,7 +14,6 @@
     '/about': About,
     '*': NotFound,
   }
-
 </script>
 
 <Navbar />
