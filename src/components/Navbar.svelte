@@ -56,7 +56,7 @@
       >
         <li>
           <a
-            href="#"
+            href="/"
             class="block py-2 px-3 md:text-white rounded-sm md:bg-transparent md:p-0"
             aria-current="page">Convert</a
           >
@@ -64,7 +64,7 @@
 
         <li>
             <a
-              href="#"
+              href="/#/charts"
               class="block py-2 px-3 md:text-white rounded-sm md:bg-transparent md:p-0"
               aria-current="page">Charts</a
             >
@@ -72,7 +72,7 @@
 
           <li>
             <a
-              href="#"
+              href="/#/coinpedia"
               class="block py-2 px-3 md:text-white rounded-sm md:bg-transparent md:p-0"
               aria-current="page">Coinpedia</a
             >
@@ -80,7 +80,7 @@
 
           <li>
             <a
-              href="#"
+              href="/#/about"
               class="block py-2 px-3 md:text-white rounded-sm md:bg-transparent md:p-0"
               aria-current="page">About</a
             >
