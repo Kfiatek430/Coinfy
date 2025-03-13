@@ -12,6 +12,7 @@
 
   export let selectedCurrency: Currency;
   export let currencies: Currency[];
+  export let id: String;
 
   $: filteredCurrencies = currencies.filter((currency) =>
     currency.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -20,7 +21,7 @@
 
   function handleClickOutside(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    if (!target.closest(".currency-dropdown")) {
+    if (!target.closest(`#dropdown${id}`)) {
       open = false;
     }
   }
@@ -30,7 +31,7 @@
   });
 </script>
 
-<div class="relative w-full lg:w-1/2 currency-dropdown">
+<div class="relative w-full lg:w-1/2 currency-dropdown" id={`dropdown${id}`}>
   <button
     on:click={() => (open = !open)}
     class="w-full flex items-center h-20 justify-between p-4 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
