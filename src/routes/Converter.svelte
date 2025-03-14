@@ -16,6 +16,12 @@
 
   let fromCurrency = currencies[0];
   let toCurrency = currencies[1];
+
+  const swapCurrencies = () => {
+    const temp = fromCurrency;
+    fromCurrency = toCurrency;
+    toCurrency = temp;
+  };
 </script>
 
 <div class="relative">
@@ -50,12 +56,13 @@
         </div>
 
         <div class="relative flex flex-col lg:flex-row gap-5 lg:w-2/3 w-full">
-          <CurrencyDropdown bind:selectedCurrency={fromCurrency} {currencies} />
+          <CurrencyDropdown bind:selectedCurrency={fromCurrency} currencies={currencies} id={"0"} />
 
           <button
-            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 inline-flex rounded-full border border-gray-300 border-solid border-gray-250 bg-white p-3 hover:bg-gray-150 transition-colors"
+            class="absolute cursor-pointer top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 inline-flex rounded-full border border-gray-300 border-solid border-gray-250 bg-white p-3 hover:bg-gray-150 transition-colors"
             aria-label="Swap currencies"
             type="button"
+            on:click={swapCurrencies}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -73,13 +80,13 @@
             </svg>
           </button>
 
-          <CurrencyDropdown bind:selectedCurrency={toCurrency} {currencies} />
+          <CurrencyDropdown bind:selectedCurrency={toCurrency} currencies={currencies} id={"1"} />
         </div>
       </div>
 
       <button
         type="button"
-        class="text-white text-center w-1/2 lg:w-1/4 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none"
+        class="text-white cursor-pointer text-center w-1/2 lg:w-1/4 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none"
         >Convert</button
       >
     </div>
