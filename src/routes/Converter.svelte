@@ -56,7 +56,7 @@
         </div>
 
         <div class="relative flex flex-col lg:flex-row gap-5 lg:w-2/3 w-full">
-          <CurrencyDropdown bind:selectedCurrency={fromCurrency} currencies={currencies} id={"0"} />
+          <CurrencyDropdown bind:selectedCurrency={fromCurrency} bind:excludedCurrency={toCurrency} currencies={currencies} id={"0"} />
 
           <button
             class="absolute cursor-pointer top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 inline-flex rounded-full border border-gray-300 border-solid border-gray-250 bg-white p-3 hover:bg-gray-150 transition-colors"
@@ -80,7 +80,7 @@
             </svg>
           </button>
 
-          <CurrencyDropdown bind:selectedCurrency={toCurrency} currencies={currencies} id={"1"} />
+          <CurrencyDropdown bind:selectedCurrency={toCurrency} bind:excludedCurrency={fromCurrency} currencies={currencies} id={"1"} />
         </div>
       </div>
 

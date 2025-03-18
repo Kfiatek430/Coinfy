@@ -11,12 +11,14 @@
   }
 
   export let selectedCurrency: Currency;
+  export let excludedCurrency: Currency;
   export let currencies: Currency[];
   export let id: String;
 
   $: filteredCurrencies = currencies.filter((currency) =>
-    currency.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    currency.code.toLowerCase().includes(searchTerm.toLowerCase())
+    (currency.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    currency.code.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    currency != excludedCurrency
   );
 
   function handleClickOutside(event: MouseEvent) {
