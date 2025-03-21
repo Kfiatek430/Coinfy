@@ -1,27 +1,33 @@
 <script lang="ts">
   import CurrencyDropdown from "./../components/CurrencyDropdown.svelte";
+  import { SharedService } from "../shared/share.service";
+  import { onMount } from "svelte";
+  import type { Currency } from "../interfaces/currency"
 
-  interface Currency {
-    code: string;
-    name: string;
-    countryCode: string;
-  }
+  const sharedService = new SharedService() 
 
-  const currencies: Currency[] = [
-    { code: "USD", name: "US Dollar", countryCode: "us" },
-    { code: "EUR", name: "Euro", countryCode: "eu" },
-    { code: "GBP", name: "British Pound", countryCode: "gb" },
-    { code: "JPY", name: "Japanese Yen", countryCode: "jp" },
-  ];
+  // const currencies: Currency[] = [
+  //   { code: "USD", name: "US Dollar", countryCode: "us" },
+  //   { code: "EUR", name: "Euro", countryCode: "eu" },
+  //   { code: "GBP", name: "British Pound", countryCode: "gb" },
+  //   { code: "JPY", name: "Japanese Yen", countryCode: "jp" },
+  // ];
 
-  let fromCurrency = currencies[0];
-  let toCurrency = currencies[1];
-
+  let fromCurrency: Currency;
+  let toCurrency: Currency;
+  let currencies: Currency[] = []
+  
   const swapCurrencies = () => {
     const temp = fromCurrency;
     fromCurrency = toCurrency;
     toCurrency = temp;
   };
+
+  onMount(async () => {
+    currencies = await sharedService.getTables();
+    fromCurrency = currencies[0]
+    toCurrency = currencies[1]
+  })
 </script>
 
 <div class="relative">
@@ -56,8 +62,11 @@
         </div>
 
         <div class="relative flex flex-col lg:flex-row gap-5 lg:w-2/3 w-full">
-          <CurrencyDropdown bind:selectedCurrency={fromCurrency} bind:excludedCurrency={toCurrency} currencies={currencies} id={"0"} />
-
+          {#if currencies.length > 0}
+          <CurrencyDropdown bind:selectedCurrency={fromCurrency} bind:excludedCurrency={toCurrency} bind:currencies={currencies} id={"0"} />
+          {:else}
+          <p>Ładowanie</p>
+          {/if}
           <button
             class="absolute cursor-pointer top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 inline-flex rounded-full border border-gray-300 border-solid border-gray-250 bg-white p-3 hover:bg-gray-150 transition-colors"
             aria-label="Swap currencies"
@@ -80,7 +89,9 @@
             </svg>
           </button>
 
+          {#if currencies.length > 0}
           <CurrencyDropdown bind:selectedCurrency={toCurrency} bind:excludedCurrency={fromCurrency} currencies={currencies} id={"1"} />
+          {/if}
         </div>
       </div>
 

@@ -1,14 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import type { Currency } from "../interfaces/currency";
 
   let open = false;
   let searchTerm = "";
-
-  interface Currency {
-    code: string;
-    name: string;
-    countryCode: string;
-  }
 
   export let selectedCurrency: Currency;
   export let excludedCurrency: Currency;
@@ -16,7 +11,7 @@
   export let id: String;
 
   $: filteredCurrencies = currencies.filter((currency) =>
-    (currency.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (currency.currency.toLowerCase().includes(searchTerm.toLowerCase()) ||
     currency.code.toLowerCase().includes(searchTerm.toLowerCase())) &&
     currency != excludedCurrency
   );
@@ -39,14 +34,14 @@
     class="w-full flex items-center h-20 justify-between p-4 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
   >
     <div class="flex items-center gap-3">
-      <img
+      <!-- <img
         src={`https://www.xe.com/svgs/flags/${selectedCurrency.countryCode}.static.svg`}
         alt={selectedCurrency.code}
         class="w-6 h-6 rounded-full border"
-      />
+      /> -->
       <div class="text-left">
         <span class="font-semibold">{selectedCurrency.code}</span>
-        <span class="text-gray-500 ml-2">{selectedCurrency.name}</span>
+        <span class="text-gray-500 ml-2">{selectedCurrency.currency}</span>
       </div>
     </div>
     <svg
@@ -83,14 +78,14 @@
               }}
               class="w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-100 transition-colors"
             >
-              <img
+              <!-- <img
                 src={`https://www.xe.com/svgs/flags/${currency.countryCode}.static.svg`}
                 alt={currency.code}
                 class="w-6 h-6 rounded-full border"
-              />
+              /> -->
               <div class="text-left">
                 <span class="font-semibold">{currency.code}</span>
-                <span class="text-gray-500 ml-2">{currency.name}</span>
+                <span class="text-gray-500 ml-2">{currency.currency}</span>
               </div>
             </button>
           </li>
