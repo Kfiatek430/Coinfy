@@ -9,7 +9,7 @@
         let data: Currency[] = [];
 
         let responses = await Promise.all(
-            StaticConfig.tablesNames.map(async (e) => {
+            StaticConfig.tablesNames.map(async (table) => {
               const response: AxiosResponse<
                 [
                   {
@@ -19,8 +19,11 @@
                     rates: Currency[];
                   }
                 ]
-                > = await axios.get(`${StaticConfig.getTablesUrl}/${e}?format=json`);
+                > = await axios.get(`${StaticConfig.getTablesUrl}/${table}?format=json`);
               
+              response.data[0].rates.map(currency => {
+                currency.table = table
+              })
               return response.data[0].rates
             }  
           )
@@ -31,10 +34,10 @@
         data.forEach(currency => {
           let curr = currency.currency;
           if (curr.includes("(")) {
-            currency.currency = curr.slice(0, curr.indexOf("(") - 1);
+            curr = curr.slice(0, curr.indexOf("(") - 1);
           }
 
-          currency.currency = currency.currency
+          curr = curr
             .trim()
             .split(" ")
             .map(el => el[0].toLocaleUpperCase() + el.slice(1))
