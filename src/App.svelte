@@ -8,13 +8,12 @@
   import About from "./routes/About.svelte";
 
   const routes = {
-    '/': Converter,
-    '/charts': Charts,
-    '/coinpedia': Coinpedia,
-    '/about': About,
-    '*': NotFound,
-  }
-
+    "/": Converter,
+    "/charts": Charts,
+    "/coinpedia": Coinpedia,
+    "/about": About,
+    "*": NotFound,
+  };
 </script>
 
 <Navbar />
