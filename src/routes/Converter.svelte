@@ -60,7 +60,7 @@
 
   <div class="relative mx-auto w-full md:w-2/3 px-4 py-4">
     <div
-      class="bg-white p-6 rounded-lg w-full flex flex-col items-end gap-3 shadow-lg"
+      class="bg-white p-6 rounded-lg w-full flex flex-col items-end gap-3 shadow-lg min-h-[232px]"
     >
       <div class="flex flex-col lg:flex-row gap-5 w-full">
         <div
