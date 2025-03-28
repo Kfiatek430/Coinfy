@@ -8,6 +8,7 @@
   export let selectedCurrency: Currency;
   export let excludedCurrency: Currency;
   export let currencies: Currency[];
+  export let change;
   export let id: String;
 
   $: filteredCurrencies = currencies.filter((currency) =>
@@ -75,6 +76,7 @@
               on:click={() => {
                 selectedCurrency = currency;
                 open = false;
+                change();
               }}
               class="w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-100 transition-colors"
             >

@@ -31,6 +31,8 @@ export class SharedService {
       )
       
       data = responses.flat()
+
+      data = Array.from(new Map(data.map(it => [it.code, it])).values())
       
       data.forEach(currency => {
         let curr = currency.currency;
