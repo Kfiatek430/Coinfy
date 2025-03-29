@@ -1,7 +1,6 @@
 import axios, { type AxiosResponse } from "axios";
 import { StaticConfig } from "../static/config";
 import type { Currency } from "../interfaces/currency";
-import type { Rate } from "../interfaces/rate";
 
 export class SharedService {
   constructor() {}
@@ -31,6 +30,8 @@ export class SharedService {
       )
       
       data = responses.flat()
+
+      data = Array.from(new Map(data.map(it => [it.code, it])).values())
       
       data.forEach(currency => {
         let curr = currency.currency;
@@ -43,6 +44,10 @@ export class SharedService {
           .split(" ")
           .map(el => el[0].toLocaleUpperCase() + el.slice(1))
           .join(" ");
+
+        if(currency.ask && currency.bid) {
+          currency.mid = (currency.ask + currency.bid) / 2
+        }
       });
 
       return data;
@@ -59,11 +64,19 @@ export class SharedService {
         table: string,
         currency: string,
         code: string,
-        rates: Rate[]
+        rates: [
+          {
+            currency: string;
+            table: string;
+            code: string;
+            mid?: number;
+            ask?: number;
+            bid?: number;
+          }
+        ]
       }
     > = await axios.get(`${StaticConfig.getRatesUrl}/${currency.table}/${currency.code}/${start.toLocaleDateString('en-CA')}/${end.toLocaleDateString('en-CA')}`)
 
-    console.log(`${StaticConfig.getRatesUrl}/${currency.table}/${currency.code}/${start.toLocaleDateString('en-CA')}/${end.toLocaleDateString('en-CA')}`)
     return response.data.rates
   }
 }
