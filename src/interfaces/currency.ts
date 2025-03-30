@@ -3,4 +3,6 @@ export interface Currency {
     table: string;
     code: string;
     mid: number;
+    ask?: number;
+    bid?: number;
 }
