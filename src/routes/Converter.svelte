@@ -15,16 +15,28 @@
 
   let fromCurrency: Currency;
   let toCurrency: Currency;
-  let currencies: Currency[] = []
+  let currencies: Currency[] = [];
+  let amount: number;
+  let convertedAmount: string;
   
   const swapCurrencies = () => {
     const temp = fromCurrency;
     fromCurrency = toCurrency;
     toCurrency = temp;
+    convert()
   };
 
+  const convert = () => {
+    if (!amount || isNaN(Number(amount))) {
+      convertedAmount = ""
+      return
+    }
+    
+    convertedAmount = (amount * fromCurrency.mid / toCurrency.mid).toFixed(2);
+  }
+
   onMount(async () => {
-    currencies = await sharedService.getTables();
+    currencies = await sharedService.getTables()
     fromCurrency = currencies[0]
     toCurrency = currencies[1]
   })
@@ -46,9 +58,9 @@
     </p>
   </div>
 
-  <div class="relative mx-auto w-full md:w-1/2 px-4 py-4">
+  <div class="relative mx-auto w-full md:w-2/3 px-4 py-4">
     <div
-      class="bg-white p-6 rounded-lg w-full flex flex-col items-end gap-3 shadow-lg"
+      class="bg-white p-6 rounded-lg w-full flex flex-col items-end gap-3 shadow-lg min-h-[232px]"
     >
       <div class="flex flex-col lg:flex-row gap-5 w-full">
         <div
@@ -56,14 +68,23 @@
         >
           <input
             id="amount"
+            type="number"
             class="w-full text-lg font-semibold focus:outline-none bg-transparent"
-            placeholder="123"
+            placeholder="10"
+            bind:value={amount}
+            on:input={convert}
           />
         </div>
 
         <div class="relative flex flex-col lg:flex-row gap-5 lg:w-2/3 w-full">
           {#if currencies.length > 0}
-          <CurrencyDropdown bind:selectedCurrency={fromCurrency} bind:excludedCurrency={toCurrency} bind:currencies={currencies} id={"0"} />
+          <CurrencyDropdown 
+            bind:selectedCurrency={fromCurrency}
+            bind:excludedCurrency={toCurrency}
+            bind:currencies={currencies}
+            change={convert}
+            id={"0"}
+          />
           {:else}
           <p>Ładowanie</p>
           {/if}
@@ -90,16 +111,31 @@
           </button>
 
           {#if currencies.length > 0}
-          <CurrencyDropdown bind:selectedCurrency={toCurrency} bind:excludedCurrency={fromCurrency} currencies={currencies} id={"1"} />
+          <CurrencyDropdown
+            bind:selectedCurrency={toCurrency}
+            bind:excludedCurrency={fromCurrency}
+            currencies={currencies}
+            change={convert}
+            id={"1"}
+          />
           {/if}
         </div>
       </div>
 
-      <button
-        type="button"
-        class="text-white cursor-pointer text-center w-1/2 lg:w-1/4 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none"
-        >Convert</button
-      >
+      {#if Number(convertedAmount) > 0}
+      <div class="flex w-full flex-row items-end">
+        <div class="flex w-full h-full flex-col gap-2 mt-5 justify-center items-start">
+          <p class="text-left text-lg font-bold text-gray-500">{amount} {fromCurrency.code}</p>
+          <p class="text-left text-3xl font-bold text-gray-700">{convertedAmount} {toCurrency.code}</p>
+        </div>
+
+        <button
+          type="button"
+          class="text-white cursor-pointer text-center w-1/2 lg:w-1/4 h-1/2 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none"
+          >View chart</button
+        >
+      </div>
+      {/if}
     </div>
   </div>
 </div>

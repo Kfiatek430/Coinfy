@@ -44,6 +44,8 @@ export class SharedService {
           .split(" ")
           .map(el => el[0].toLocaleUpperCase() + el.slice(1))
           .join(" ");
+        
+        currency.currency = curr
 
         if(currency.ask && currency.bid) {
           currency.mid = (currency.ask + currency.bid) / 2
