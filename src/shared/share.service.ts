@@ -43,6 +43,8 @@ export class SharedService {
           .split(" ")
           .map(el => el[0].toLocaleUpperCase() + el.slice(1))
           .join(" ");
+        
+        currency.currency = curr
       });
 
       return data;
