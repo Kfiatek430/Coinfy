@@ -5,8 +5,9 @@
 	import { onMount } from "svelte";
 
 	const shared = new SharedService();
-	export let currencyCode = "USD";
-	console.log(currencyCode);
+	export let currencyCode1 = "USD"; 
+	export let currencyCode2 = "EUR"; 
+	console.log(currencyCode1, currencyCode2);
 
 	async function fetchCurrency(code) {
 		const tables = await shared.getTables();
@@ -33,12 +34,13 @@
 	/**
 	 * @type {{ date: string; value: number; }[]}
 	 */
-	let data = [];
+	let data1 = [];
+	let data2 = [];
 
-	async function prepareData(currency) {
-		data = [];
+	async function prepareData(currency, dataArray) {
+		dataArray.length = 0;
 		currency.forEach((element) => {
-			data.push({ date: element.effectiveDate, value: element.mid });
+			dataArray.push({ date: element.effectiveDate, value: element.mid });
 		});
 	}
 
@@ -47,20 +49,22 @@
 	let height;
 	let xScale;
 	let yScale;
-	let line;
-	let area;
+	let line1, line2;
+	let area1, area2;
 
 	let brush,
 		xScaleBrush,
 		brushHeight = 50;
-	let xAxis, areaPath, linePath;
+	let xAxis, areaPath1, areaPath2, linePath1, linePath2;
 	let svg;
 
-	let pointer, tooltip;
+	let pointer1, pointer2, tooltip;
 
-	async function setChart(code) {
-		const currency = await fetchCurrency(code);
-		await prepareData(currency);
+	async function setChart(code1, code2) {
+		const currency1 = await fetchCurrency(code1);
+		const currency2 = await fetchCurrency(code2);
+		await prepareData(currency1, data1);
+		await prepareData(currency2, data2);
 
 		margin = { top: 20, right: 30, bottom: 40, left: 40 };
 		width = 800 - margin.left - margin.right;
@@ -68,20 +72,23 @@
 		brushHeight = 50;
 
 		const parseDate = d3.timeParse("%Y-%m-%d");
-		data.forEach((d) => {
+		data1.forEach((d) => {
+			d.date = parseDate(d.date);
+		});
+		data2.forEach((d) => {
 			d.date = parseDate(d.date);
 		});
 
 		xScale = d3
 			.scaleTime()
-			.domain(d3.extent(data, (d) => d.date))
+			.domain(d3.extent(data1.concat(data2), (d) => d.date))
 			.range([0, width]);
 
 		yScale = d3
 			.scaleLinear()
 			.domain([
-				d3.min(data, (d) => d.value) * 0.9,
-				d3.max(data, (d) => d.value) * 1.1,
+				d3.min(data1.concat(data2), (d) => d.value) * 0.9,
+				d3.max(data1.concat(data2), (d) => d.value) * 1.1,
 			])
 			.range([height, 0]);
 
@@ -96,8 +103,10 @@
 			}
 
 			xAxis.call(d3.axisBottom(xScale));
-			areaPath.attr("d", area);
-			linePath.attr("d", line);
+			areaPath1.attr("d", area1);
+			areaPath2.attr("d", area2);
+			linePath1.attr("d", line1);
+			linePath2.attr("d", line2);
 		}
 
 		brush = d3
@@ -108,12 +117,23 @@
 			])
 			.on("brush end", brushed);
 
-		line = d3
+		line1 = d3
 			.line()
 			.x((d) => xScale(d.date))
 			.y((d) => yScale(d.value));
 
-		area = d3
+		line2 = d3
+			.line()
+			.x((d) => xScale(d.date))
+			.y((d) => yScale(d.value));
+
+		area1 = d3
+			.area()
+			.x((d) => xScale(d.date))
+			.y0(height)
+			.y1((d) => yScale(d.value));
+
+		area2 = d3
 			.area()
 			.x((d) => xScale(d.date))
 			.y0(height)
@@ -124,12 +144,12 @@
 	}
 
 	function clearChart() {
-		d3.select("#chart").selectAll("*").remove();
+		d3.select("#chart2").selectAll("*").remove();
 	}
 
 	function drawChart() {
 		const svgContainer = d3
-			.select("#chart")
+			.select("#chart2")
 			.attr("width", width + margin.left + margin.right)
 			.attr("height", height + margin.top + margin.bottom + brushHeight + 20);
 
@@ -184,20 +204,35 @@
 
 		const yAxis = svg.append("g").call(d3.axisLeft(yScale));
 
-		areaPath = chartArea
+		areaPath1 = chartArea
 			.append("path")
-			.data([data])
+			.data([data1])
 			.attr("fill", "steelblue")
 			.attr("opacity", 0.5)
-			.attr("d", area);
+			.attr("d", area1);
 
-		linePath = chartArea
+		areaPath2 = chartArea
 			.append("path")
-			.data([data])
+			.data([data2])
+			.attr("fill", "orange")
+			.attr("opacity", 0.5)
+			.attr("d", area2);
+
+		linePath1 = chartArea
+			.append("path")
+			.data([data1])
 			.attr("fill", "none")
 			.attr("stroke", "blue")
 			.attr("stroke-width", 2)
-			.attr("d", line);
+			.attr("d", line1);
+
+		linePath2 = chartArea
+			.append("path")
+			.data([data2])
+			.attr("fill", "none")
+			.attr("stroke", "red")
+			.attr("stroke-width", 2)
+			.attr("d", line2);
 
 		const brushContainer = svgContainer
 			.append("g")
@@ -218,10 +253,16 @@
 			.attr("fill", "#777")
 			.attr("fill-opacity", 0.3);
 
-		pointer = svg
+		pointer1 = svg
 			.append("circle")
 			.attr("r", 5)
 			.attr("fill", "blue")
+			.style("visibility", "hidden");
+
+		pointer2 = svg
+			.append("circle")
+			.attr("r", 5)
+			.attr("fill", "orange")
 			.style("visibility", "hidden");
 
 		tooltip = svg
@@ -239,50 +280,57 @@
 			const mouseX = d3.pointer(event)[0];
 			const mouseDate = xScale.invert(mouseX);
 
-			const i = bisectDate(data, mouseDate, 1);
-			const d0 = data[i - 1];
-			const d1 = data[i];
+			const i1 = bisectDate(data1, mouseDate, 1);
+			const i2 = bisectDate(data2, mouseDate, 1);
+			const d0_1 = data1[i1 - 1];
+			const d0_2 = data2[i2 - 1];
 
-			if (!d0) {
-				pointer.style("visibility", "hidden");
+			if (!d0_1 && !d0_2) {
+				pointer1.style("visibility", "hidden");
+				pointer2.style("visibility", "hidden");
 				tooltip.style("visibility", "hidden");
 				return;
 			}
 
-			const closestDataPoint =
-				d1 && mouseDate - d0.date > d1.date - mouseDate ? d1 : d0;
-
-			const closestYValue = yScale(closestDataPoint.value);
-
-			pointer
-				.attr("cx", xScale(closestDataPoint.date))
-				.attr("cy", closestYValue)
-				.style("visibility", "visible");
+			if (d0_1) {
+				pointer1
+					.attr("cx", xScale(d0_1.date))
+					.attr("cy", yScale(d0_1.value))
+					.style("visibility", "visible");
+			}
+			if (d0_2) {
+				pointer2
+					.attr("cx", xScale(d0_2.date))
+					.attr("cy", yScale(d0_2.value))
+					.style("visibility", "visible");
+			}
 
 			tooltip
 				.html(
-					`<tspan x="${xScale(closestDataPoint.date)}" dy="-12" text-anchor="middle">Value: ${closestDataPoint.value.toFixed(2)}</tspan>` +
-						`<tspan x="${xScale(closestDataPoint.date)}" dy="12" text-anchor="middle">${d3.timeFormat("%Y-%m-%d")(closestDataPoint.date)}</tspan>`
+					`<tspan x="${xScale(d0_1.date)}" dy="-12" text-anchor="middle">${currencyCode1}: ${d0_1.value.toFixed(2)}</tspan>` +
+						`<tspan x="${xScale(d0_2.date)}" dy="12" text-anchor="middle">${currencyCode2}: ${d0_2.value.toFixed(2)}</tspan>` +
+						`<tspan x="${xScale(d0_1.date)}" dy="12" text-anchor="middle">${d3.timeFormat("%Y-%m-%d")(d0_1.date)}</tspan>`
 				)
 				.style("visibility", "visible");
 		});
 
 		svg.on("mouseleave", function () {
-			pointer.style("visibility", "hidden");
+			pointer1.style("visibility", "hidden");
+			pointer2.style("visibility", "hidden");
 			tooltip.style("visibility", "hidden");
 		});
 	}
 
 	$: {
-		if (currencyCode) {
-			console.log("Currency changed:", currencyCode);
-			setChart(currencyCode);
+		if (currencyCode1 && currencyCode2) {
+			console.log("Currency codes changed:", currencyCode1, currencyCode2);
+			setChart(currencyCode1, currencyCode2);
 		}
 	}
 </script>
 
 <div class="flex justify-center">
-	<svg id="chart" class="w- h-110 max-w-4xl"></svg>
+	<svg id="chart2" class="w- h-110 max-w-4xl"></svg>
 </div>
 
 <style>
