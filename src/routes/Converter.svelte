@@ -37,8 +37,8 @@
 
   onMount(async () => {
     currencies = await sharedService.getTables()
-    fromCurrency = currencies[0]
-    toCurrency = currencies[1]
+    fromCurrency = currencies.find(el => el.code === "USD")!
+    toCurrency = currencies.find(el => el.code === "EUR")!
   })
 </script>
 
