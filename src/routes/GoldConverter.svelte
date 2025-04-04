@@ -102,7 +102,7 @@
           </svg>
         </button>
 
-        <span>{isGoldToPLN ? "PLN" : "g Au"}</span>
+        <span>{isGoldToPLN ? "PLN" : "AU"}</span>
       </div>
       {#if Number(convertedAmount) > 0}
         <div class="flex w-full flex-col items-center mt-5">
@@ -112,7 +112,7 @@
           </p>
           <p class="text-3xl font-bold text-gray-700">
             {convertedAmount}
-            {isGoldToPLN ? "PLN" : "g Au"}
+            {isGoldToPLN ? "PLN" : "gram AU"}
           </p>
         </div>
       {/if}
@@ -125,9 +125,5 @@
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
-  }
-
-  nav {
-    height: 120%;
   }
 </style>
