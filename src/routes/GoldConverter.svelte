@@ -78,7 +78,7 @@
       <div
         class="relative flex flex-row items-center justify-center gap-4 text-lg font-bold"
       >
-        <span>{isGoldToPLN ? "g Au" : "PLN"}</span>
+        <span>{isGoldToPLN ? "AU" : "PLN"}</span>
 
         <button
           class="cursor-pointer flex items-center justify-center rounded-full border border-gray-300 bg-white p-3 hover:bg-gray-200 transition-colors shadow-md"
@@ -89,15 +89,15 @@
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            class="h-6 w-6 text-gray-600"
+            viewBox="0 0 17 17"
+            aria-hidden="true"
+            class="h-4 w-4 rotate-90 text-greyblue-400 md:rotate-0"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M19 9l-7 7-7-7"
+              fill="currentColor"
+              fill-rule="evenodd"
+              d="M11.726 1.273l2.387 2.394H.667V5h13.446l-2.386 2.393.94.94 4-4-4-4-.94.94zM.666 12.333l4 4 .94-.94L3.22 13h13.447v-1.333H3.22l2.386-2.394-.94-.94-4 4z"
+              clip-rule="evenodd"
             />
           </svg>
         </button>
@@ -108,7 +108,7 @@
         <div class="flex w-full flex-col items-center mt-5">
           <p class="text-lg font-bold text-gray-500">
             {amount}
-            {isGoldToPLN ? "g Au" : "PLN"}
+            {isGoldToPLN ? "gram AU" : "PLN"}
           </p>
           <p class="text-3xl font-bold text-gray-700">
             {convertedAmount}
