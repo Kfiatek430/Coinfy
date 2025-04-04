@@ -1,4 +1,4 @@
-# Coinfy ![](https://img.shields.io/badge/status-in%20progress-yellow)
+# Coinfy
 
 Coinfy is a modern currency conversion and financial insights tool built with Svelte. It provides daily exchange rates, historical data visualization, and financial analysis to help users stay informed about global currency trends.
 
