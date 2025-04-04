@@ -14,10 +14,11 @@
       >
     </a>
     <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-      <button
-        type="button"
+      <a
+        href="https://github.com/Kfiatek430/Coinfy"
+        target="_blank"
         class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 text-center"
-        >Get started</button
+        >Visit Github</a
       >
       <button
         data-collapse-toggle="navbar-sticky"
