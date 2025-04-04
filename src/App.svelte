@@ -4,14 +4,14 @@
   import Converter from "./routes/Converter.svelte";
   import Charts from "./routes/Charts.svelte";
   import NotFound from "./routes/NotFound.svelte";
-  import Coinpedia from "./routes/Coinpedia.svelte";
   import About from "./routes/About.svelte";
+  import GoldConverter from "./routes/GoldConverter.svelte";
 
   const routes = {
     "/": Converter,
     "/charts": Charts,
-    "/coinpedia": Coinpedia,
     "/about": About,
+    "/gold": GoldConverter,
     "*": NotFound,
   };
 </script>

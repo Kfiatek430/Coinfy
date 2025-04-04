@@ -29,8 +29,8 @@ export class SharedService {
 					return response.data[0].rates;
 				})
 			);
-
-			data = responses.flat();
+      
+      data = responses.flat()
 
 			data = Array.from(new Map(data.map((it) => [it.code, it])).values());
 
