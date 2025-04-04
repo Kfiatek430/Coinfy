@@ -39,7 +39,6 @@
 	 */
 	let data1 = [];
 	let data2 = [];
-	// Nowa seria danych: wartość przeliczenia
 	let convertedData = [];
 
 	async function prepareData(currency, dataArray) {
@@ -49,16 +48,13 @@
 		});
 	}
 
-	// Funkcja łącząca dane i obliczająca convertedAmount dla każdej daty
 	function computeConvertedData() {
 		convertedData.length = 0;
-		// Zakładamy, że data1 i data2 mają takie same daty (lub przynajmniej odpowiadają sobie po indeksie)
 		data1.forEach((d, i) => {
 			const d2 = data2[i];
 			if(d2) {
 				convertedData.push({ 
 					date: d.date, 
-					// Wynik przeliczania jako liczba, zaokrąglony do 2 miejsc po przecinku
 					value: +(amount * d.value / d2.value).toFixed(2) 
 				});
 			}
@@ -81,13 +77,11 @@
 	let pointer, tooltip;
 
 	async function setChart(code1, code2) {
-		// Pobierz kursy dla obu walut
 		const currency1 = await fetchCurrency(code1);
 		const currency2 = await fetchCurrency(code2);
 		await prepareData(currency1, data1);
 		await prepareData(currency2, data2);
 		
-		// Oblicz serię konwersji wg wzoru
 		computeConvertedData();
 
 		margin = { top: 20, right: 30, bottom: 40, left: 40 };
@@ -96,28 +90,23 @@
 		brushHeight = 50;
 
 		const parseDate = d3.timeParse("%Y-%m-%d");
-		// Konwertujemy daty w obu seriach na obiekt Date
 		data1.forEach((d) => {
 			d.date = parseDate(d.date);
 		});
 		data2.forEach((d) => {
 			d.date = parseDate(d.date);
 		});
-		// Przekonwertuj daty w convertedData
 		convertedData.forEach((d) => {
-			// Jeśli data jest stringiem, zamień na Date
 			if (typeof d.date === "string") {
 				d.date = parseDate(d.date);
 			}
 		});
 
-		// Ustal zakres osi x na podstawie dat z przeliczeń
 		xScale = d3
 			.scaleTime()
 			.domain(d3.extent(convertedData, (d) => d.date))
 			.range([0, width]);
 
-		// Ustal zakres osi y na podstawie wartości przeliczeń
 		yScale = d3
 			.scaleLinear()
 			.domain([
@@ -149,7 +138,6 @@
 			])
 			.on("brush end", brushed);
 
-		// Funkcje liniowe i obszarowe dla przeliczonej wartości
 		lineConverted = d3
 			.line()
 			.x((d) => xScale(d.date))
@@ -189,7 +177,6 @@
 
 		const chartArea = svg.append("g").attr("clip-path", "url(#clip)");
 
-		// Dodaj linie siatki
 		svg
 			.append("g")
 			.attr("class", "grid")
@@ -227,7 +214,6 @@
 
 		const yAxis = svg.append("g").call(d3.axisLeft(yScale));
 
-		// Rysuj obszar i linię dla przeliczonej wartości
 		areaPath = chartArea
 			.append("path")
 			.data([convertedData])
@@ -262,7 +248,6 @@
 			.attr("fill", "#777")
 			.attr("fill-opacity", 0.3);
 
-		// Ustawienie wskaźnika (kółka) i tooltipa dla interakcji
 		pointer = svg
 			.append("circle")
 			.attr("r", 5)
@@ -299,8 +284,8 @@
 
 			tooltip
 				.html(
-					`<tspan x="${xScale(d0.date)}" dy="-12" text-anchor="middle">Kwota: ${amount}</tspan>` +
-					`<tspan x="${xScale(d0.date)}" dy="12" text-anchor="middle">Przeliczenie: ${d0.value}</tspan>` +
+					`<tspan x="${xScale(d0.date)}" dy="-12" text-anchor="middle">Amount: ${amount}</tspan>` +
+					`<tspan x="${xScale(d0.date)}" dy="12" text-anchor="middle">Conversion: ${d0.value}</tspan>` +
 					`<tspan x="${xScale(d0.date)}" dy="12" text-anchor="middle">${d3.timeFormat("%Y-%m-%d")(d0.date)}</tspan>`
 				)
 				.style("visibility", "visible");

@@ -75,7 +75,7 @@
 
 	<div class="relative z-10 text-center text-black px-4 py-8 w-full max-w-4xl">
 		<h1 class="text-4xl font-bold mt-12 mb-6 text-white">
-			Currency Rate Chart
+			Currency Rate Chart to PLN
 		</h1>
 
 		<select
