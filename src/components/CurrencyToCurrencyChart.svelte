@@ -7,7 +7,7 @@
 	const shared = new SharedService();
 	export let currencyCode1 = "USD";
 	export let currencyCode2 = "EUR";
-  export let year = "2025";
+  	export let year = "2025";
 
 	async function fetchCurrency(code) {
 		const tables = await shared.getTables();
