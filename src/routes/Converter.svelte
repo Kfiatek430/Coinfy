@@ -1,5 +1,6 @@
 <script lang="ts">
   import CurrencyDropdown from "./../components/CurrencyDropdown.svelte";
+  import CurrencyPerCurrencyChart from "./../components/CurrencyPerCurrencyChart.svelte";
   import { SharedService } from "../shared/share.service";
   import { onMount } from "svelte";
   import type { Currency } from "../interfaces/currency"
@@ -121,14 +122,14 @@
           <p class="text-left text-lg font-bold text-gray-500">{amount} {fromCurrency.code}</p>
           <p class="text-left text-3xl font-bold text-gray-700">{convertedAmount} {toCurrency.code}</p>
         </div>
-
-        <button
-          type="button"
-          class="text-white cursor-pointer text-center w-1/2 lg:w-1/4 h-1/2 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none"
-          >View chart</button
-        >
       </div>
       {/if}
     </div>
+
+    {#if Number(convertedAmount) > 0}
+      <div class="bg-white mt-5 shadow-lg rounded-lg p-6">
+        <CurrencyPerCurrencyChart bind:currencyCode1={fromCurrency.code} bind:currencyCode2={toCurrency.code} bind:amount={amount} />
+      </div>
+    {/if}
   </div>
 </div>
