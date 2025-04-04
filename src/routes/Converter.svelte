@@ -6,13 +6,6 @@
 
   const sharedService = new SharedService() 
 
-  // const currencies: Currency[] = [
-  //   { code: "USD", name: "US Dollar", countryCode: "us" },
-  //   { code: "EUR", name: "Euro", countryCode: "eu" },
-  //   { code: "GBP", name: "British Pound", countryCode: "gb" },
-  //   { code: "JPY", name: "Japanese Yen", countryCode: "jp" },
-  // ];
-
   let fromCurrency: Currency;
   let toCurrency: Currency;
   let currencies: Currency[] = [];
