@@ -96,9 +96,3 @@
     </div>
   {/if}
 </div>
-
-<style>
-  .currency-dropdown img {
-    object-fit: cover;
-  }
-</style>
