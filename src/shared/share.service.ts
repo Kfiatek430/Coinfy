@@ -66,6 +66,7 @@ export class SharedService {
 			start.toLocaleDateString("en-CA"),
 			end.toLocaleDateString("en-CA")
 		);
+
 		const response: AxiosResponse<{
 			table: string;
 			currency: string;

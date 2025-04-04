@@ -6,11 +6,10 @@
 
 	const shared = new SharedService();
 	export let currencyCode = "USD";
-	console.log(currencyCode);
+	export let year = "2025";
 
 	async function fetchCurrency(code) {
 		const tables = await shared.getTables();
-		console.log(tables);
 
 		code = code.toUpperCase();
 
@@ -19,13 +18,12 @@
 			table = tables.find((element) => element.code === "USD");
 		}
 
-		console.log(table);
+		const startDate = new Date(`${year}-01-01`);
+		const today = new Date();
+		const isCurrentYear = parseInt(year) === today.getFullYear();
+		const endDate = isCurrentYear ? today : new Date(`${year}-12-31`);
 
-		const currency = await shared.getRates(
-			table,
-			new Date("2024-01-01"),
-			new Date("2025-01-01")
-		);
+		const currency = await shared.getRates(table, startDate, endDate);
 
 		return currency;
 	}
@@ -274,8 +272,7 @@
 	}
 
 	$: {
-		if (currencyCode) {
-			console.log("Currency changed:", currencyCode);
+		if (currencyCode && year) {
 			setChart(currencyCode);
 		}
 	}

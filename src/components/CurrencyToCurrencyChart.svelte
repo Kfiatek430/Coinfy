@@ -5,13 +5,12 @@
 	import { onMount } from "svelte";
 
 	const shared = new SharedService();
-	export let currencyCode1 = "USD"; 
-	export let currencyCode2 = "EUR"; 
-	console.log(currencyCode1, currencyCode2);
+	export let currencyCode1 = "USD";
+	export let currencyCode2 = "EUR";
+  export let year = "2025";
 
 	async function fetchCurrency(code) {
 		const tables = await shared.getTables();
-		console.log(tables);
 
 		code = code.toUpperCase();
 
@@ -20,13 +19,12 @@
 			table = tables.find((element) => element.code === "USD");
 		}
 
-		console.log(table);
+		const startDate = new Date(`${year}-01-01`);
+		const today = new Date();
+		const isCurrentYear = parseInt(year) === today.getFullYear();
+		const endDate = isCurrentYear ? today : new Date(`${year}-12-31`);
 
-		const currency = await shared.getRates(
-			table,
-			new Date("2024-01-01"),
-			new Date("2025-01-01")
-		);
+		const currency = await shared.getRates(table, startDate, endDate);
 
 		return currency;
 	}
@@ -321,12 +319,11 @@
 		});
 	}
 
-	$: {
-		if (currencyCode1 && currencyCode2) {
-			console.log("Currency codes changed:", currencyCode1, currencyCode2);
-			setChart(currencyCode1, currencyCode2);
-		}
-	}
+  $: {
+    if (currencyCode1 && currencyCode2 && year) {
+      setChart(currencyCode1, currencyCode2);
+    }
+  }
 </script>
 
 <div class="flex justify-center">
